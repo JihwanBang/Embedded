@@ -25,7 +25,7 @@ int main()
   int pwr;
   int n, i, j;// Loop index
   double s0;
-  double s[TERMS], e[TERMS];
+  double s[TERMS+1], e[TERMS+1];
   double dtr = PI/180.;
   double inrad, angpwr;
   
@@ -60,7 +60,7 @@ int main()
 
   // 4. Compute error
   for (n=1; n<=TERMS; ++n)
-    e[i] = s[i] - s0;
+    e[n] = s[n] - s0;
 
   // 5. Print result
   printf("sin(%d) using Taylor series:\n", indeg);
