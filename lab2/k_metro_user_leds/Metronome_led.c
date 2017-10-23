@@ -7,7 +7,7 @@
 #include <signal.h>    // Defines signal-handling functions (i.e. trap Ctrl-C) 
 #include <unistd.h>        // close() 
 #include "Metronome_led.h" 
-#define CLOCK 1000*500
+#define CLOCK 1000*1000
 
 // Global variables 
 volatile int keepgoing = 1;    // Set to 0 when Ctrl-c is pressed 
@@ -52,6 +52,7 @@ int main(int argc, char *argv[]) {
         //usleep(1); 
     } */
     while(keepgoing){
+/*
 	*gpio_setdataout_addr = USR0_LED+USR1_LED+USR2_LED;
 	usleep(CLOCK);
 	*gpio_cleardataout_addr = USR0_LED+USR1_LED+USR2_LED;
@@ -76,6 +77,19 @@ int main(int argc, char *argv[]) {
 	usleep(CLOCK);
 	*gpio_cleardataout_addr = USR0_LED;
 	usleep(CLOCK);
+*/
+	for (int i=0 ; i< 6; i++){
+	  if (i == 0)
+	    *gpio_setdataout_addr = USR0_LED+USR1_LED+USR2_LED;
+          else if (i==3)
+            *gpio_setdataout_addr = USR0_LED+USR1_LED;
+          else 
+            *gpio_setdataout_addr = USR0_LED;
+          usleep(CLOCK);
+          *gpio_cleardataout_addr = USR0_LED+USR1_LED+USR2_LED;
+          usleep(CLOCK);
+          
+	}
     }
     munmap((void *)gpio_addr, GPIO_SIZE); 
     close(fd); 
