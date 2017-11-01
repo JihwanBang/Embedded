@@ -100,8 +100,9 @@ void* thread_main(void *met){
   volatile unsigned int *gpio_datain;
   volatile unsigned int *gpio_setdataout_addr;
   volatile unsigned int *gpio_cleardataout_addr;
- 
-  int utime = 60*1000000/(*th_met).tempo;
+
+  
+  //int utime_value = 60*1000000/(*th_met).tempo;
   int two_four[2] = {3,1};
   int three_four[3] = {3,1,1};
   int four_four[4] = {3,1,2,1};
@@ -110,13 +111,12 @@ void* thread_main(void *met){
   gpio_datain            = gpio_addr + GPIO_DATAIN;
   gpio_setdataout_addr   = gpio_addr + GPIO_SETDATAOUT;
   gpio_cleardataout_addr = gpio_addr + GPIO_CLEARDATAOUT;
-
   while(1){
+	int utime = 60*1000000/(*th_met).tempo;
 	if ((*th_met).run == 0){
 		fflush(stdout);
 		usleep(100000);
 	}
-	
   	else{
 		switch((*th_met).timesig){
 		  case 1: for (int i = 0; i < 2;i++){
@@ -171,19 +171,24 @@ int main(void)
   printf("'b': Inc tempo 			Inc tempo by 5\n");
   printf("'m': Start/Stop 		Toggles start and stop\n");
   printf("'q': Quit this program\n");
+  int status = pthread_create(&thread, NULL, &thread_main, (void *)&met);
+	if (status != 0)
+		printf("cannot create thread\n");
+	else 
+		printf("create successfully\n");
 
   while (keepgoing) {
-	//c = getch();
+	c= getch();
 	//printf("%c", c);
 	//fflush(stdout);
-	
+	/*
 	int status = pthread_create(&thread, NULL, &thread_main, (void *)&met);
 	c = getch();
 	if (status != 0)
 		printf("cannot create thread\n");
 	else 
 		printf("create successfully\n");
-
+	*/
 	
 	if (c == 'q') break;
 	if (c == 'z'){
@@ -208,8 +213,9 @@ int main(void)
 
 	printf("Key %c: TimeSig %s, Tempo %d, Run %d.\n", c, comp[met.timesig-1], met.tempo , met.run);
 	fflush(stdout);	
-	pthread_cancel(thread);
+	//pthread_cancel(thread);
   }
+  pthread_cancel(thread);
   printf("  Quit!\n");
   fflush(stdout);
   munmap((void *)met.gpio_addr, GPIO_SIZE);
