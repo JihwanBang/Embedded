@@ -107,11 +107,12 @@ void* thread_main(void *met){
   int three_four[3] = {3,1,1};
   int four_four[4] = {3,1,2,1};
   int six_eight[6] = {3,1,1,2,1,1};
- 
+
   gpio_datain            = gpio_addr + GPIO_DATAIN;
   gpio_setdataout_addr   = gpio_addr + GPIO_SETDATAOUT;
   gpio_cleardataout_addr = gpio_addr + GPIO_CLEARDATAOUT;
   while(1){
+	int time_sig = (*th_met).timesig;
 	int utime = 60*1000000/(*th_met).tempo;
 	if ((*th_met).run == 0){
 		fflush(stdout);
@@ -121,18 +122,26 @@ void* thread_main(void *met){
 		switch((*th_met).timesig){
 		  case 1: for (int i = 0; i < 2;i++){
 				one_step_tempo(utime, two_four[i], gpio_setdataout_addr, gpio_cleardataout_addr);
+				if (time_sig != (*th_met).timesig || !(*th_met).run)
+					break;
 			  } 
 			  break;
 		  case 2: for (int i = 0; i < 3; i++){
 				one_step_tempo(utime, three_four[i], gpio_setdataout_addr, gpio_cleardataout_addr);
+				if (time_sig != (*th_met).timesig || !(*th_met).run)
+					break;		  
 			  }
 			  break;
 		  case 3: for (int i = 0; i< 4; i++){
 				one_step_tempo(utime, four_four[i], gpio_setdataout_addr, gpio_cleardataout_addr);
+				if (time_sig != (*th_met).timesig || !(*th_met).run)
+					break;		
 			  }
 			  break; 
 		  case 4: for (int i = 0 ; i<6; i++){
 				one_step_tempo(utime, six_eight[i], gpio_setdataout_addr, gpio_cleardataout_addr);
+				if (time_sig != (*th_met).timesig || !(*th_met).run)
+					break;
 			  }
 			  break;
 		}			
