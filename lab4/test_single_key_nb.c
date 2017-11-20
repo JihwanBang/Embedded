@@ -61,7 +61,7 @@ char getch(void)
 {
   char ch = 0;
 
-  if (read(0, &ch, 1) < 0)  perror ("read()");		// Read one character
+  if (read(0, &ch, 1) < 0)  usleep(250)//perror ("read()");		// Read one character
  
   return ch;
 }

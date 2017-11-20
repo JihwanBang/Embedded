@@ -68,8 +68,10 @@ char getch(void)
 {
   char ch = 0;
 
-  if (read(0, &ch, 1) < 0)  perror ("read()");		// Read one character
- 
+  //if (read(0, &ch, 1) < 0)  perror ("read()");		// Read one character
+  while (read(0, &ch, 1) <0 ){
+
+  } 
   return ch;
 }
 
@@ -205,7 +207,7 @@ int main(void)
   while(1){
 	//non blocking module 
 	while(!key_hit()){
-	  usleep(25000);
+	  usleep(250);
 	}
 
 	c= getch();
@@ -222,7 +224,7 @@ int main(void)
 		ntime = 1000000000 / tempo * 60 /2; 
 		s_time = ntime / 1000000000;
 		ntime = ntime % 1000000000;
-		printf("ntime: %d",ntime);
+		// printf("ntime: %d",ntime);
 	}	
 	if (c == 'b'){
 		tempo += 5;
